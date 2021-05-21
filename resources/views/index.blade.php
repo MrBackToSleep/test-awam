@@ -101,6 +101,7 @@
             }
         }).done(function(data) {
             if(data === 'isNaN'){
+                $('#resultat').text('');
                 $('#error span#message').text('Calcul impossible ! Veuillez vérifier votre saisie puis réessayez.');
                 $('#error').removeClass('d-none');
             }else{
