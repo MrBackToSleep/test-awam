@@ -1,62 +1,34 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Installation
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+_Renseignez vos identifiants MySQL dans le fichier ``.env`` puis passez aux étapes suivantes._
 
-## About Laravel
+Obtention des dépendances : 
+```
+composer update
+```
+Création de la base de données
+```
+php artisan db:create
+```
+_Si ça ne marche pas, c'est probablement que votre utilisateur MySQL n'a pas les droits pour la création d'une base de données. Vous devrez donc la créer à la main._
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Création des tables par les migrations
+```
+php artisan migrate
+```
+_La table 'Devise' est déjà pré-remplie par la migration_
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+##Pour que le mail s'envoie automatiquement
+Rien de plus simple qu'une petite tâche CRON qui va exécuter la route ``monsite.fr/sendMail`` tous les jours à l'heure souhaitée.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+##Démarche
+Pour convertir des données monétaires, la manière la plus pratique c'est d'avoir une donnée étalon. Comme pour le système bancaire actuel où toute l'économie est basée sur le dollar (USD), j'ai décidé de prendre le dollar (USD) comme valeur étalon. De cette manière on pourra facilement ajouter de nouvelles devises juste en les renseignant en base de données accompagnées de leurs équivalents dollar (USD).
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Ce que j'aurais fait si j'avais eu plus de temps
++ Amélioration de l'interface
++ Vérification des champs avant l'envoi PHP (Impossibilité de saisir autre chose que des chiffres et des virgules dans les champs montants)
++ Rendre un peu plus propre tout ce qui est ``$montant1``, ``$montant2``, ``$devise1``, ``$devise2`` en le faisant passer par une collection et en bouclant dessus de manière à ce que le code soit plus adaptable et peut-être un peu moins moche.
++ Le mail aurait certainement été mieux charté et j'aurais essayé de passer par une vue blade plutôt que d'écrire l'HTML en dur dans la fonction du service.
++ On pourrait facilement implémenter des calculs type soustraction, multiplication, division en mettant une nouvelle liste déroulante pour choisir l'opérateur désiré.
++ Un taux de change en temps réel en s'appuyant sur une API qui mettrait automatiquement à jour les équivalents dollar (USD) des devises.
++ Je serais allé m'acheter à manger, j'ai faim. 
