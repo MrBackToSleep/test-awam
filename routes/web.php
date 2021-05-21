@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DeviseController;
+use App\Http\Controllers\HistoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,3 +16,4 @@ use App\Http\Controllers\DeviseController;
 
 Route::get('/', [DeviseController::class, 'index'])->name('accueil');
 Route::post('/calcul', [DeviseController::class, 'calcul'])->name('devises_calcul');
+Route::get('/sendMail', [HistoryController::class, 'sendMailRecapitulatif'])->name('send_mail_recapitulatif');
