@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Devise;
+use App\Models\History;
 
 class DeviseService
 {
@@ -15,6 +16,8 @@ class DeviseService
      */
     public function calcul($montant1, Devise $devise1, $montant2, Devise $devise2){
 
+        $historyService = new HistoryService();
+
         // Vérification des données en entrée
         $montant1 = str_replace(',', '.', $montant1);
         $montant2 = str_replace(',', '.', $montant2);
@@ -25,16 +28,21 @@ class DeviseService
 
         // Si les 2 devises sont pareilles, pas la peine de s'embêter à faire des conversions
         if($devise1 == $devise2){
-            return $this->arrondirAuCentime(($montant1 + $montant2)).' '.$devise2->symbole;
+            $total = $this->arrondirAuCentime(($montant1 + $montant2)).' '.$devise2->symbole;
+        }else{
+            // Conversion et total des devises en USD
+            $montantUSD1 = $this->conversionDeviseToUSD($montant1, $devise1);
+            $montantUSD2 = $this->conversionDeviseToUSD($montant2, $devise2);
+            $total = $montantUSD1 + $montantUSD2;
+
+            // Résultat de la conversion arrondi au centime
+            $total = $this->arrondirAuCentime($this->conversionUSDToDevise($total, $devise2)) .' '. $devise2->symbole;
         }
 
-        // Conversion et total des devises en USD
-        $montantUSD1 = $this->conversionDeviseToUSD($montant1, $devise1);
-        $montantUSD2 = $this->conversionDeviseToUSD($montant2, $devise2);
-        $total = $montantUSD1 + $montantUSD2;
+        // Log
+        (new History(['log' => $historyService->formatLog($montant1, $devise1, $montant2, $devise2, $total) ]))->save();
 
-        // Résultat de la conversion arrondi au centime près
-        return $this->arrondirAuCentime($this->conversionUSDToDevise($total, $devise2)) .' '. $devise2->symbole;
+        return $total;
     }
 
     /**
